@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: instacart_raw
+    database: instacart-bi-461818       #GCP Project id
+    schema: instacart_raw
+    tables:
+      - name: orders
+      - name: products
+      - name: aisles
+      - name: departments
+      - name: order_products__prior
+      - name: order_products__train
