@@ -1,11 +1,11 @@
-{{ config(materialized='view') }}
+{{ config(materialized='table') }}
 
 SELECT
   p.product_id,
   p.product_name,
-  p.aisle_id,             -- ✅ include foreign key ID
+  p.aisle_id,
   a.aisle,
-  p.department_id,        -- ✅ include foreign key ID
+  p.department_id,
   d.department
 FROM {{ source('instacart_raw', 'products') }} p
 LEFT JOIN {{ source('instacart_raw', 'aisles') }} a

@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: dim_users
+    description: "Dimension table for user behavior and churn features"
+    columns:
+      - name: user_id
+        tests: [not_null, unique]
+      - name: likely_to_churn
+        tests: [not_null]
+
+  - name: dim_products
+    description: "Product dimension with metadata from aisles and departments"
+    columns:
+      - name: product_id
+        tests: [not_null, unique]

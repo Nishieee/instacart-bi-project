@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: fct_user_order_summary
+    description: "User-level order behavior metrics"
+  - name: product_reorder_stats
+    description: "Product-level reorder performance metrics"
