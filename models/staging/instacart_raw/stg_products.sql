@@ -3,9 +3,9 @@
 SELECT
   p.product_id,
   p.product_name,
-  p.aisle_id,
+  p.aisle_id,             -- ✅ include foreign key ID
   a.aisle,
-  p.department_id,
+  p.department_id,        -- ✅ include foreign key ID
   d.department
 FROM {{ source('instacart_raw', 'products') }} p
 LEFT JOIN {{ source('instacart_raw', 'aisles') }} a
