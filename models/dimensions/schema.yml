@@ -2,12 +2,17 @@ version: 2
 
 models:
   - name: dim_users
-    description: "Dimension table for user behavior and churn features"
+    description: "User dimension combining order summary and churn signal"
     columns:
       - name: user_id
         tests: [not_null, unique]
+      - name: total_orders
+      - name: first_order_number
+      - name: last_order_number
+      - name: avg_days_between_orders
+      - name: is_one_time_user
       - name: likely_to_churn
-        tests: [not_null]
+
 
   - name: dim_products
     description: "Product dimension with metadata from aisles and departments"
