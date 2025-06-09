@@ -1,4 +1,3 @@
-
 {{ config(materialized='table') }}
 
 WITH order_data AS (
@@ -19,7 +18,7 @@ WITH order_data AS (
         dt.is_weekend
     FROM {{ ref('stg_orders') }} o
     JOIN {{ ref('stg_order_products') }} op ON o.order_id = op.order_id
-    JOIN {{ ref('stg_products') }} p ON op.product_id = p.product_id
+    JOIN {{ ref('dim_products') }} p ON op.product_id = p.product_id
     LEFT JOIN {{ ref('dim_time') }} dt ON o.order_dow = dt.day_of_week
 )
 
