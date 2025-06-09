@@ -1,12 +1,13 @@
 {{ config(materialized='table') }}
 
 SELECT
-  user_id,
-  COUNT(DISTINCT order_id) AS total_orders,
-  MIN(order_number) AS first_order_number,
-  MAX(order_number) AS last_order_number,
-  AVG(days_since_prior_order) AS avg_days_between_orders,
-  CASE WHEN COUNT(*) = 1 THEN TRUE ELSE FALSE END AS is_one_time_user,
-  CASE WHEN MAX(days_since_prior_order) > 20 THEN TRUE ELSE FALSE END AS likely_to_churn
-FROM {{ ref('stg_orders') }}
-GROUP BY user_id
+  f.user_id,
+  f.total_orders,
+  f.avg_days_between_orders,
+  f.first_order_number,
+  f.last_order_number,
+  c.is_one_time_user,
+  c.likely_to_churn
+FROM {{ ref('fct_user_order_summary') }} f
+LEFT JOIN {{ ref('user_churn_signals') }} c
+  ON f.user_id = c.user_id

@@ -1,7 +1,20 @@
 version: 2
 
 models:
-  - name: fct_user_order_summary
-    description: "User-level order behavior metrics"
   - name: product_reorder_stats
     description: "Product-level reorder performance metrics"
+
+  - name: fct_user_order_summary
+    description: "User-level fact metrics around order frequency and recency"
+    columns:
+      - name: user_id
+        tests: [not_null, unique]
+
+  - name: user_churn_signals
+    description: "User churn classification (1-time buyer, high churn risk)"
+    columns:
+      - name: user_id
+        tests: [not_null, unique]
+      - name: is_one_time_user
+      - name: likely_to_churn
+
