@@ -14,3 +14,19 @@ models:
     columns:
       - name: product_id
         tests: [not_null, unique]
+  
+  - name: dim_time
+    description: "Generated date dimension using dbt_utils.date_spine"
+    columns:
+      - name: date
+        tests: [not_null, unique]
+      - name: day_of_week
+        tests: [not_null]
+      - name: day_name
+        tests: [not_null]
+      - name: week
+        tests: [not_null]
+      - name: month
+        tests: [not_null]
+      - name: year
+        tests: [not_null]
