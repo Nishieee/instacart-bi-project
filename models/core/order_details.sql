@@ -3,17 +3,20 @@
 WITH order_data AS (
     SELECT
         o.order_id,
-        o.user_id,
+        o.user_id AS customer_id,
         o.order_number,
         o.order_dow,
         o.order_hour_of_day,
         o.days_since_prior_order,
+        
         op.product_id,
         op.add_to_cart_order,
         op.reordered,
+
         p.product_name,
-        p.aisle,
+        p.aisle AS aisle_name,
         p.department,
+
         dt.day_name,
         dt.is_weekend
     FROM {{ ref('stg_orders') }} o
