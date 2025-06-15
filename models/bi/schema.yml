@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: top_reordered_products
+    description: "Top 25 reordered products with reorder count and rate."
+    columns:
+      - name: product_id
+        description: "Unique ID for the product"
+        tests: [not_null]
+      - name: reorder_rate
+        description: "Percentage of times product was reordered"
+
+  - name: orders_by_hour
+    description: "Total orders placed during each hour of the day"
+    columns:
+      - name: order_hour_of_day
+        description: "Hour when order was placed"
+        tests: [not_null]
+
+  - name: first_vs_repeated_orders
+    description: "Breakdown of first-time and repeat product orders"
+    columns:
+      - name: reordered
+        description: "0 = first-time, 1 = repeat"
+        tests: [not_null]
