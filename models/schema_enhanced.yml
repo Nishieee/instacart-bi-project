@@ -1,0 +1,129 @@
+version: 2
+
+models:
+  # Core Fact Table
+  - name: fct_order_details
+    description: "Enhanced fact table with order details, product information, and time dimensions"
+    config:
+      materialized: table
+    columns:
+      - name: order_detail_id
+        description: "Surrogate key for order detail records"
+        tests: [not_null, unique]
+      - name: order_id
+        description: "Unique order identifier"
+        tests: [not_null]
+      - name: product_id
+        description: "Unique product identifier"
+        tests: [not_null]
+      - name: user_id
+        description: "Unique customer identifier"
+        tests: [not_null]
+      - name: reorder_rate
+        description: "Product reorder rate"
+        tests: [not_null, accepted_values: {values: [0, 1]}]
+
+  # Enhanced Customer Dimension
+  - name: dim_customers
+    description: "Enhanced customer dimension with RFM analysis and segmentation"
+    config:
+      materialized: table
+    columns:
+      - name: user_id
+        description: "Unique customer identifier"
+        tests: [not_null, unique]
+      - name: total_orders
+        description: "Total number of orders by customer"
+        tests: [not_null, positive_values]
+      - name: customer_segment
+        description: "Customer segmentation based on behavior"
+        tests: [not_null, accepted_values: {values: ['VIP Customer', 'Regular Customer', 'One-time Customer', 'Occasional Customer']}]
+      - name: is_churn_risk
+        description: "Flag indicating if customer is at risk of churning"
+        tests: [not_null]
+
+  # Enhanced Product Dimension
+  - name: dim_products_enhanced
+    description: "Enhanced product dimension with performance metrics and lifecycle indicators"
+    config:
+      materialized: table
+    columns:
+      - name: product_id
+        description: "Unique product identifier"
+        tests: [not_null, unique]
+      - name: product_name
+        description: "Product name"
+        tests: [not_null]
+      - name: reorder_rate
+        description: "Product reorder rate"
+        tests: [not_null, range: {min: 0, max: 1}]
+      - name: volume_category
+        description: "Product volume category"
+        tests: [not_null, accepted_values: {values: ['High Volume', 'Medium Volume', 'Low Volume']}]
+      - name: product_lifecycle
+        description: "Product lifecycle stage"
+        tests: [not_null, accepted_values: {values: ['New Product', 'Staple Product', 'Regular Product', 'Occasional Product', 'Rare Product']}]
+
+  # Revenue Analytics Fact Table
+  - name: fct_revenue_analytics
+    description: "Comprehensive revenue analytics with leakage detection and customer journey mapping"
+    config:
+      materialized: table
+    columns:
+      - name: order_id
+        description: "Unique order identifier"
+        tests: [not_null]
+      - name: product_id
+        description: "Unique product identifier"
+        tests: [not_null]
+      - name: user_id
+        description: "Unique customer identifier"
+        tests: [not_null]
+      - name: revenue_leakage_category
+        description: "Revenue leakage classification"
+        tests: [not_null, accepted_values: {values: ['New Customer - Low Reorder Product', 'Churn Risk - High Reorder Product', 'Frequent Customer - Long Gap', 'Standard Order']}]
+      - name: customer_journey_stage
+        description: "Customer journey stage"
+        tests: [not_null, accepted_values: {values: ['Acquisition', 'Retention', 'At Risk', 'Engagement']}]
+
+# Tests for referential integrity
+tests:
+  - name: fct_order_details_product_fk
+    description: "Ensure all products in fact table exist in product dimension"
+    config:
+      severity: error
+    test: ref('fct_order_details')
+    column_name: product_id
+    ref_table: ref('dim_products_enhanced')
+    ref_column: product_id
+
+  - name: fct_order_details_customer_fk
+    description: "Ensure all customers in fact table exist in customer dimension"
+    config:
+      severity: error
+    test: ref('fct_order_details')
+    column_name: user_id
+    ref_table: ref('dim_customers')
+    ref_column: user_id
+
+# Data quality checks
+models:
+  - name: fct_order_details
+    tests:
+      - name: no_duplicate_order_products
+        description: "Ensure no duplicate order-product combinations"
+        sql: |
+          SELECT order_id, product_id, COUNT(*) as cnt
+          FROM {{ ref('fct_order_details') }}
+          GROUP BY order_id, product_id
+          HAVING COUNT(*) > 1
+
+  - name: dim_customers
+    tests:
+      - name: customer_segment_consistency
+        description: "Ensure customer segments are consistent with order counts"
+        sql: |
+          SELECT user_id, customer_segment, total_orders
+          FROM {{ ref('dim_customers') }}
+          WHERE (customer_segment = 'One-time Customer' AND total_orders != 1)
+             OR (customer_segment = 'VIP Customer' AND total_orders < 10)
