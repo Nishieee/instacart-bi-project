@@ -2,20 +2,21 @@
 
 ## 📊 Project Overview
 
-A **Business Intelligence (BI) platform** for Instacart to detect revenue leakage and optimize grocery e-commerce operations using dbt and BigQuery.
+A comprehensive **Business Intelligence (BI) and Analytics platform** designed for Instacart's grocery e-commerce ecosystem to drive data-driven decision making, optimize customer lifetime value (CLV), and maximize revenue per customer (RPC). This enterprise-grade solution leverages modern data stack technologies to transform raw transactional data into actionable business insights for revenue optimization and operational excellence.
 
 ### 🎯 Business Goals
 - **Revenue Leakage Detection**: Identify customer churn and product performance issues
 - **Operational Optimization**: Optimize inventory and staffing based on data insights
 - **Customer Retention**: Improve customer lifetime value through targeted strategies
 
-## 🏗️ Data Architecture
-
-### Recommended Diagram Tools
-- **Draw.io (diagrams.net)** - FREE, perfect for ERDs and data flow diagrams
-- **dbdiagram.io** - FREE/PAID, specifically for database schemas
-- **Lucidchart** - PAID, enterprise-level architecture diagrams
-- **Microsoft Visio** - PAID, professional data modeling and architecture diagrams
+### 🏪 E-commerce Business Context
+This platform addresses critical e-commerce challenges including:
+- **Customer Acquisition Cost (CAC) optimization** through targeted marketing insights
+- **Average Order Value (AOV) enhancement** via product recommendation analytics
+- **Customer Lifetime Value (CLV) maximization** through retention strategies
+- **Inventory turnover optimization** to reduce carrying costs and stockouts
+- **Conversion rate optimization** through customer journey analysis
+- **Return on Ad Spend (ROAS) improvement** via customer segmentation
 
 ### Architecture Overview
 ```
@@ -41,6 +42,7 @@ instacart-bi-project/
 - **BigQuery**: Data warehouse and analytics
 - **dbt**: Data transformation and modeling
 - **Looker**: Business intelligence and dashboarding platform
+- **Microsoft Visio** - Data modeling and architecture diagrams
 
 ## 📊 Data Models
 
@@ -193,27 +195,8 @@ dbt docs generate
 dbt docs serve
 ```
 
-## 📈 Future Enhancements
-
-### **Planned Features**
-- **Real-time Analytics**: Streaming data integration
-- **Machine Learning**: Predictive analytics models
-- **Advanced Segmentation**: Behavioral clustering
-- **API Integration**: External data sources
-
----
-
 ## 📄 License
 
 This project is licensed under the MIT License.
 
-## 🙏 Acknowledgments
-
-- **Instacart**: For providing the dataset
-- **dbt Community**: For the excellent transformation framework
-- **Google Cloud**: For the scalable data platform
-
 ---
-
-**Last Updated**: December 2024  
-**Version**: 1.0.0
